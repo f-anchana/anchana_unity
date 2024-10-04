@@ -1,4 +1,4 @@
-# Projet d'exercice MMI 2025
+![image](https://github.com/user-attachments/assets/4c8371d8-5338-4fdf-8b34-4d83730c7a2c)# Projet d'exercice MMI 2025
 
 # Setup
 
@@ -86,5 +86,123 @@ Lorsque vous manipulez ces contrôles, les valeurs du composant Transform change
 2. Glissez/déposez la nouvelle scène
 > [!TIP]
 > Utilisez le raccourcis Ctrl+Shift+B pour ouvrir rapidement les Build Settings
+
+## Prefabs
+
+Un Prefab agit comme un modèle à partir duquel vous pouvez créer de nouvelles instances préfabriquées d'un GameObject dans la scène. 
+Cela vous permet de créer, configurer et stocker un GameObject complet avec tous ses composants, valeurs de propriété et enfants en tant qu'asset réutilisable.
+
+### Créer un Prefab
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Manual/CreatingPrefabs.html)
+
+Faites glisser un GameObject de la fenêtre Hierarchy vers la fenêtre Project.
+Le GameObject, ainsi que tous ses composants et enfants, deviennent un nouvel Asset dans votre fenêtre Project. 
+
+> [!TIP]
+> Ce processus de création du Prefab transforme également le GameObject d'origine en une instance du nouveau Prefab.
+
+Les Prefabs dans la fenêtre Project sont affichés avec une vue miniature du GameObject ou l'icône Prefab en forme de cube bleu en fonction de la manière dont vous avez paramétré l'affichage.
+
+![Image d'illustration](https://docs.unity3d.com/uploads/Main/PrefabsInProjectWindow1.png)
+	
+Toutes les modifications sont automatiquement répercutées dans les instances du Prefab modifié. 
+Cela permet des changements à l'échelle du projet sans avoir à effectuer à plusieurs reprises la même modification sur chaque copie de l'élément.
+
+Vous pouvez remplacer les paramètres des instances de Prefab individuelles si vous souhaitez que certaines instances d'un Prefab diffèrent des autres. 
+Vous pouvez également créer des variantes de Prefab qui vous permettent de regrouper un ensemble de remplacements dans une variation significative d'un Prefab appelée Prefab Variant.
+
+### Modifier un Prefab
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Manual/EditingInPrefabMode.html)
+
+Ouvrez-le dans le Prefab Mode en cliquant sur la flèche à droite de son nom dans la scène.
+Ou en double-cliquant sur le Prefab dans la fenêtre Project.
+
+![Image d'illustration](https://docs.unity3d.com/uploads/Main/PrefabHierarchyOpenArrow.png)
+
+Ce mode vous permet d'afficher et de modifier le contenu du Prefab séparément de tout autre GameObject dans votre scène. 
+Les modifications que vous effectuez dans le Prefab Mode affectent toutes les instances de ce Prefab.
+
+![Image d'illustration](https://docs.unity3d.com/uploads/Main/PrefabContextVsIsolation.png)
+
+En Prefab Mode, la vue Scene affiche une barre de navigation en haut. 
+L'entrée la plus à droite correspond au Prefab actuellement ouvert. 
+Utilisez la barre de navigation pour revenir aux scènes principales ou aux autresPrefabs que vous avez peut-être ouvertes en naviguant la hiérarchie.
+
+### Prefab Variants
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Manual/PrefabVariants.html)
+
+Une variante de Prefab hérite des propriétés d'un autre Prefab, appelée la base. 
+Les modifications apportés à la variante de Prefab ont priorité sur les valeurs de la base. 
+Une variante de Prefab peut avoir n'importe quelle autre Prefab comme base, y compris les Prefab de modèle ou d'autres variantes de Prefab.
+
+Les Prefab Variant sont affichées avec l'icône préfabriquée bleue décorée de flèches.
+
+![Image d'illustration](https://docs.unity3d.com/uploads/Main/PrefabsBasicAndVariant.png)
+
+Cliquez avec le bouton droit sur un Prefab dans la vue Project et sélectionner Create > Prefab Variant. 
+Cela crée une variante du Prefab sélectionné, qui ne comporte initialement aucune substitution. 
+Vous pouvez ouvrir la variante de Prefab dans le Prefab Mode pour commencer à y ajouter des substitutions.
+
+Vous pouvez également faire glisser une instance de Prefab de la **Hierarchy** vers la fenêtre **Project**. 
+Une boîte de dialogue vous demande si vous souhaitez créer un nouveau Prefab ou un Prefab Variant. 
+Si vous choisissez Prefab Variant, vous obtenez une nouvelle variante basée sur l'instance de Prefab que vous avez fait glisser. 
+Toutes les substitutions que vous aviez sur cette instance se trouvent désormais à l'intérieur de la nouvelle variante. 
+Vous pouvez l'ouvrir dans le Prefab Mode pour ajouter des substitutions supplémentaires ou pour modifier ou supprimer des substitutions.
+
+## Créer un nouveau script
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Manual/CreatingAndUsingScripts.html)
+
+- À partir du menu Créer en haut à gauche du panneau Projet
+- À partir du menu contextuel (clic droit) Create / C# Script
+- En sélectionnant Assets > Create > C# Script dans le menu principal
+
+> [!TIP]
+> Lorsque vous créez un script C# à partir de la fenêtre de projet d’Unity, il hérite automatiquement de [MonoBehaviour](https://docs.unity3d.com/Manual/class-MonoBehaviour.html) et vous fournit un template.
+
+## Ajouter un nouveau component
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Manual/UsingComponents.html)
+
+Une fois sélectionné le GameObject
+- À partir du menu Component si il s'agit d'un composant natif
+- Par le Component Browser dans l'inspecteur
+
+## Input System
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.11/manual/index.html)
+
+Obtenir un Input directement à partir d'un périphérique d'entrée est rapide et pratique, mais nécessite un chemin distinct pour chaque type de périphérique.
+Cela rend également plus difficile de modifier ultérieurement le contrôle du périphérique qui déclenche un événement spécifique dans le jeu.
+
+À la place il est possible d'utiliser les actions comme intermédiaire entre les Inputs des périphériques et les réponses qu'ils déclenchent.
+Le moyen le plus simple est d'utiliser le composant PlayerInput sur le GameObject d'un joueur. 
+
+> [!IMPORTANT]
+> Chaque PlayerInput représente un joueur différent dans le jeu.
+
+### Modifier un asset Input Action
+
+Pour afficher l'éditeur d'actions
+- double-cliquez sur un élément .inputactions dans le navigateur de projet
+- ou sélectionnez le bouton Modifier l'élément dans l'inspecteur de cet élément
+
+L'éditeur d'actions apparaît sous la forme d'une fenêtre distincte, que vous pouvez également ancrer dans l'interface  pour ne pas avoir à accéder à l'asset systématiquement.
+
+![Image d'illustration](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.11/manual/images/ActionsEditorCallout.png)
+
+> [!CAUTION]
+> Par défaut, Unity n'enregistre pas les modifications que vous effectuez dans l'éditeur d'actions lorsque vous enregistrez le projet.
+> Pour enregistrer vos modifications, sélectionnez Save Asset dans la barre d'outils de la fenêtre.
+> Ou bien activez l'enregistrement automatique en activant la case à cocher Auto Save dans la barre d'outils.
+
+
+
+
+
+
 
 
