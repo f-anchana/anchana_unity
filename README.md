@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/4c8371d8-5338-4fdf-8b34-4d83730c7a2c)# Projet d'exercice MMI 2025
+# Projet d'exercice MMI 2025
 
 # Setup
 
