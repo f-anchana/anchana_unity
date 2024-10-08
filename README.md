@@ -199,7 +199,59 @@ L'éditeur d'actions apparaît sous la forme d'une fenêtre distincte, que vous 
 > Pour enregistrer vos modifications, sélectionnez Save Asset dans la barre d'outils de la fenêtre.
 > Ou bien activez l'enregistrement automatique en activant la case à cocher Auto Save dans la barre d'outils.
 
+## Collider Interactions
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Manual/collider-interactions.html)
 
+Lorsque deux Colliders entrent en contact, vous pouvez appeler des fonctions pour déclencher d'autres événements dans votre projet via des scripts.
+
+> [!CAUTION]
+> Les événements Collider nécessitent une configuration via un script C# ; vous ne pouvez pas les configurer en utilisant uniquement l'interface utilisateur.
+
+#### Collision events
+Ces événements se produisent lorsque deux Colliders entrent en contact et qu'aucun des collisionneurs n'a la fonction Déclencheur activée.
+
+#### Trigger events 
+Ces événements se produisent lorsque deux Colliders entrent en contact, qu'au moins un Collider a l'option IsTrigger activée et qu'au moins un Collider a un Rigidbody ou ArticulationBody.
+
+### OnCollision events
+
+Le travail avec les événements de collision implique principalement les fonctions API suivantes :
+
+[Collider.OnCollisionEnter](https://docs.unity3d.com/ScriptReference/Collider.OnCollisionEnter.html) : Appelée sur chaque GameObject lorsque deux Colliders entrent en contact pour la première fois.
+
+[Collider.OnCollisionStay](https://docs.unity3d.com/ScriptReference/Collider.OnCollisionStay.html) : Appelée sur chaque GameObject une fois par mise à jour physique lorsque deux Colliders sont en contact.
+
+[Collider.OnCollisionExit](https://docs.unity3d.com/ScriptReference/Collider.OnCollisionExit.html) : Appelée sur chaque GameObject lorsque deux Colliders cessent le contact.
+
+> [!CAUTION]
+> Pour les Collision events, au moins un des objets impliqués doit avoir un corps physique dynamique (c'est-à-dire un Rigidbody ou un ArticulationBody dont l'option IsKinematic est désactivée). 
+
+> [!WARNING]
+> Si les deux GameObjects d'une collision sont des corps physiques Kinematic, la collision n'appelle pas les fonctions OnCollision.
+
+### OnTrigger events
+
+Les Triggers Colliders ne provoquent pas de collisions. 
+Au lieu de cela, ils détectent les autres **Colliders** qui les traversent et appellent des fonctions que vous pouvez utiliser pour déclencher des événements.
+
+L'utilisation de Trigger Collider implique principalement les fonctions API suivantes :
+
+[Collider.OnTriggerEnter](https://docs.unity3d.com/ScriptReference/Collider.OnTriggerEnter.html) : Appelée sur un GameObject qui possède un Collider en mode IsTrigger lorsqu'il entre en contact pour la première fois avec un autre Collider.
+
+[Collider.OnTriggerStay](https://docs.unity3d.com/ScriptReference/Collider.OnTriggerStay.html) : Appelée sur un GameObject qui possède un Collider en mode IsTrigger une fois par image s'il détecte un autre Collider à l'intérieur de ses limites.
+
+[Collider.OnTriggerExit](https://docs.unity3d.com/ScriptReference/Collider.OnTriggerExit.html) : Appelée sur un GameObject qui possède un Collider en mode IsTrigger lorsqu'il cesse le contact avec un autre Collider.
+
+### Créer et configurer un Trigger Collider
+
+1. Créez un GameObject
+	- Pour créer un Trigger Collider invisible, créez un GameObject vide. Dans la plupart des cas, ces colliders sont invisibles.
+	- Pour créer un Trigger Collider visible, créez un GameObject doté d'un Mesh. Ce type de Collider n'a besoin d'être visible que s'il est possible pour d'autres GameObjects de le traverser de manière visible pendant le jeu.
+2. Ajoutez un composant Collider au GameObject
+3. Configurez le Collider comme un Trigger:
+	- En éditeur, affichez l'inspecteur du Collider en question et cochez la propriété IsTrigger
+	- En script, modifiez la propriété IsTrigger avec la valeur true
 
 
 
