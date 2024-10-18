@@ -27,7 +27,6 @@ namespace Controllers
 
         public void OnRespawn(InputValue value)
         {
-            Debug.Log("On Respawn");
             Respawn();
         }
 
