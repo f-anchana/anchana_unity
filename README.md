@@ -422,6 +422,138 @@ La plupart des composants d'interaction ont des points communs. Ils sont sélect
 
 Les composants d'interaction ont au moins un UnityEvent qui est invoqué lorsque l'utilisateur interagit avec le composant d'une manière spécifique. Le système d'interface utilisateur détecte et enregistre toutes les exceptions qui se propagent hors du code attaché à UnityEvent.
 
+# La lumière
+Les rayons de lumière rebondissent sur les objets qui nous entourent.
+Chaque rayon réagit en fonction des propriétés des matériaux rencontrés lors de chaque rebond (fréquence, direction, etc).
+Une fois que ces rayons atteignent l'œil, le cerveau interprète ce qui "reste" de la lumière pour déterminer notre environnement.
+
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/2022.3/Documentation/Manual/LightingInUnity.html)
+
+## Éclairage direct et indirect
+On parle d'éclairage direct lorsque le rayon de lumière atteint l'œil après avoir rebondi une seule fois sur un objet.
+A l'inverse un éclairage indirect correspond aux multiples rebonds d'un rayon de lumière avant qu'il n'atteigne l'œil.
+C'est cette partie de l'éclairage qui est compliqué à calculer de manière réaliste.
+En informatique on va donc contraindre le nombre de rebonds (généralement 3 maximum) pour réduire les calculs à réaliser.
+
+## Temps réel et précalculé
+L'éclairage en temps réel (**realtime**) est utilisé lorsque Unity calcule l'éclairage au moment de l'exécution. 
+L'éclairage précalculé (**baked**) est utilisé lorsque Unity effectue des calculs d'éclairage à l'avance et enregistre les résultats sous forme de données d'éclairage, qui sont ensuite appliquées au moment de l'exécution. 
+ 
+Dans Unity, votre projet peut utiliser un éclairage en temps réel, un éclairage précalculé ou un mélange des deux (appelé éclairage mixte).
+
+## Éclairage global
+Unity dispose de deux systèmes d'éclairage global, qui combinent l'éclairage direct et indirect.
+Le système d'illumination globale en temps réel est [Enlighten Realtime Global Illumination](https://docs.unity3d.com/2022.3/Documentation/Manual/realtime-gi-using-enlighten.html).
+Cela va par exemple permettre d'éclairer des objets avec une lumière vacillante.
+
+> [!NOTE]
+> Son usage est conseillé pour les plateformes suffisamment robustes pour gérer le calcul de ces changements à chaque frame.
+> En général les plateformes mobiles vont éviter ce type d'éclairage et se rabattre sur un éclairage précalculé.
+
+Le système Baked Global Illumination se compose de lightmaps, de light probs et de reflection probes qu'il est possible de précalculé avec le [Progressive Lightmapper](https://docs.unity3d.com/2022.3/Documentation/Manual/progressive-lightmapper.html).
+Ce système permet de générer les données d'éclairage dans une scène et sur les objets quelle contient pendant l'édition plutôt que l'éxécution. 
+
+> [!IMPORTANT]
+> Il est important de noter que l'éclairage précalculé ne fonctionne que pour les objets statiques dans la scène.
+> Par ailleurs cela nécessite des UV non superposés avec de petites erreurs de surface et d'angle.
+
+> [!TIP]
+> Il est nécessaire de cocher la propriété Generate Lightmaps UVs sur les objets importés dans Unity si ces UVs n'ont pas été créées préalablement dans l'outil de modelling 3D.
+> ![image](https://github.com/user-attachments/assets/390a5d12-bf32-4811-921e-f9819b25163f)
+
+## Éclairage ambiant
+Toute nouvelle scène créée dans Unity est déjà éclairée de deux façons : 
+	1. Un éclairage ambiant de base (fenêtre lighting-->settings).
+	2. Une lumière directionnelle présente dans l'onglet hierarchy 
+ 
+Même en désactivant toutes les sources de lumière dans votre environnement, ce dernier reste légèrement éclairé par la lumière ambiante qui éclaire tous les objets de façon égale. 
+Pour contrôler et modifier cet éclairage ambiant, choisir le menu Window/Renderin/LightingSettings, puis l'onglet Scene.
+
+## Éclairage par composant
+
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/2022.3/Documentation/Manual/Lighting.html)
+
+Vous pouvez ajouter des lumières à votre scène à partir du menu GameObject->Light. 
+Vous choisirez le format de lumière que vous souhaitez dans le sous-menu qui apparaît. 
+Une fois qu'une lumière a été ajoutée, vous pouvez la manipuler comme n'importe quel autre GameObject. 
+De plus, vous pouvez ajouter un composant Light à n'importe quel GameObject sélectionné en utilisant Component->Rendering->Light.
+
+Plusieurs types de lumières son disponibles avec ce composant.
+![image](https://github.com/user-attachments/assets/6e414466-8bff-49e8-a023-69bdf59cf868)
+
+### Lumière directionnelle (Directional light)
+Ce comportant de nombreuses façons comme le soleil, les lumières directionnelles peuvent être considérées comme des sources lumineuses distantes qui existent à une distance infinie. 
+Une lumière directionnelle n'a pas de position source identifiable et l'objet lumineux peut donc être placé n'importe où dans la scène.
+
+> [!TIP]
+> La rotation de la lumière directionnelle par défaut entraîne la mise à jour de la **Skybox**.
+> Si la Skybox est sélectionnée comme source ambiante, l'éclairage ambiant changera en fonction de ces couleurs. 
+> Avec la lumière orientée vers le côté, parallèlement au sol, des effets de coucher de soleil peuvent être obtenus.
+> En pointant la lumière vers le haut, le ciel devient noir, comme s'il faisait nuit.
+> Avec la lumière orientée vers le bas, le ciel ressemblera à la lumière lorsque le soleil est au zénith.
+
+### Point de lumière (point light)
+Un point lumineux est situé à un point de l'espace et envoie de la lumière dans toutes les directions de manière égale. 
+La direction de la lumière frappant une surface est la ligne reliant le point de contact au centre de l'objet lumineux. 
+L'intensité diminue avec la distance par rapport à la lumière.
+
+### Lumière spot (spotlight)
+Tout comme un point de lumière, un spot a un emplacement et une portée spécifiques sur lesquels la lumière tombe. 
+Cependant, un spot est limité à un angle, ce qui donne une zone d'éclairage en forme de cône.
+Cela est généralement utilisé pour les sources de lumière artificielle telles que les lampes de poche, les phares de voiture et les projecteurs.
+
+### Lumière de zone (area light)
+Vous pouvez définir une lumière de zone par l'une des deux formes dans l'espace : un rectangle ou un disque. 
+Une lumière de zone émet de la lumière depuis un côté de cette forme. 
+La lumière émise se propage uniformément dans toutes les directions sur la surface de cette forme.
+ 
+> [!IMPORTANT]
+> Étant donné que ce calcul d’éclairage nécessite beaucoup de ressources processeur, les lumières de zone ne sont pas disponibles en temps-réel et ne peuvent être intégrées que dans des lightmaps précalculées.
+
+## Éclairage provenant d'un objet (Emissive)
+
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/2022.3/Documentation/Manual/lighting-emissive-materials.html)
+
+Il est possible d'ajuster les propriétés du matériel d'un objet pour qu'il émette de la lumière.
+Ces objets contribuent à la lumière réfléchie dans votre scène et les propriétés associées telles que la couleur et l'intensité peuvent être modifiées pendant le jeu.
+ 
+L'émission ne sera reçue que par les objets marqués comme « Static » ou « Lightmap Static » dans l'inspecteur.
+De même, les matériaux émissifs appliqués à une géométrie non statique ou dynamique telle que des personnages ne contribueront pas à l’éclairage de la scène.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
